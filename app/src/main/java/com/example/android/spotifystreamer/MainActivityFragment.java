@@ -15,6 +15,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +34,6 @@ import java.util.ArrayList;
  */
 public class MainActivityFragment extends Fragment {
 
-    String[] urls;
     GridView gridview;
     ArrayList<Uri> list;
     String category = "popular";
@@ -55,7 +56,7 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         gridview = (GridView) rootView.findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this.getContext()));
+        //gridview.setAdapter(new ImageAdapter(this.getContext()));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent,
@@ -72,7 +73,6 @@ public class MainActivityFragment extends Fragment {
 
         FetchMoviesTask moviesTask = new FetchMoviesTask();
         moviesTask.execute(category);
-
     }
 
     @Override
@@ -184,27 +184,33 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onPostExecute(String[] result){
             if(result!=null){
-                urls = new String[result.length];
+                ArrayList<String> urls = new ArrayList<String>(result.length);
                 for(int i=0;i<result.length;++i){
                     String s = result[i].split("-")[0];
-                    urls[i] = "http://image.tmdb.org/t/p/w185/" + s;
+                    urls.add("http://image.tmdb.org/t/p/w185/" + s);
                 }
-
+                ImageAdapter imageAdapter = new ImageAdapter(getActivity(),urls);
+                gridview.setAdapter(imageAdapter);
             }
         }
     }
     public class ImageAdapter extends BaseAdapter
     {
         private Context context;
+        private ArrayList<String> movies;
+        private Picasso mpicasso;
+        //private LayoutInflater inflater;
 
-        public ImageAdapter(Context c)
+        public ImageAdapter(Context c, ArrayList<String> movies)
         {
-            context = c;
+            this.context = c;
+            this.movies = movies;
+            mpicasso = Picasso.with(context);
         }
 
         //---returns the number of images---
         public int getCount() {
-            return imageIDs.length;
+            return movies.size();
         }
 
         //---returns the ID of an item---
@@ -218,17 +224,17 @@ public class MainActivityFragment extends Fragment {
 
         //---returns an ImageView view---
         public View getView(int position, View convertView, ViewGroup parent)
-        {
+        {   View view = null;
             ImageView imageView;
             if (convertView == null) {
-                imageView = new ImageView(context);
-                imageView.setLayoutParams(new GridView.LayoutParams(185, 185));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                view = LayoutInflater.from(context).inflate(R.layout.fragment_main, parent, false);
+                imageView = (ImageView) view.findViewById(R.id.grid_item_movies);
             } else {
                 imageView = (ImageView) convertView;
             }
-            imageView.setImageResource(imageIDs[position]);
-            return imageView;
+            mpicasso.load(movies.get(position)).into(imageView);
+            //imageView.setImageResource(imageIDs[position]);
+            return view;
         }
     }
 }
