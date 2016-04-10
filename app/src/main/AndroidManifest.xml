@@ -20,17 +20,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".SettingsActivity"
             android:label="Preferences"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="nosensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="MainActivity">
-            </meta-data>
+                android:value="MainActivity"></meta-data>
         </activity>
-
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.spotifystreamer.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

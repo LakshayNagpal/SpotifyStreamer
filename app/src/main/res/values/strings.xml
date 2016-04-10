@@ -4,4 +4,5 @@
     <string name="action_refresh">Refresh</string>
     <string name="movies_key">Movies</string>
     <string name="movies_title">Sort By</string>
+    <string name="title_activity_detail">DetailActivity</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.android.spotifystreamer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +40,7 @@ public class MainActivityFragment extends Fragment {
     //ArrayList<Uri> list;
     //String category = "popular";
     String category;
+    String[] resultStr;
     Integer[] imageIDs = {
             R.drawable.sample_0,
             R.drawable.sample_1,
@@ -62,11 +63,26 @@ public class MainActivityFragment extends Fragment {
         //gridview.setAdapter(new ImageAdapter(this.getContext()));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView<?> parent,
                                     View v, int position, long id) {
-                Toast.makeText(getActivity(),
-                        "pic" + (position + 1) + " selected",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),
+//                        "pic" + (position + 1) + " selected",
+//                        Toast.LENGTH_SHORT).show();
+                String url = resultStr[position].split("%")[0];
+                String movieoverview = resultStr[position].split("%")[1];
+                String release_date = resultStr[position].split("%")[2];
+                String title = resultStr[position].split("%")[3];
+                String vote_average = resultStr[position].split("%")[4];
+
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("url", url);
+                intent.putExtra("overview", movieoverview);
+                intent.putExtra("release_date", release_date);
+                intent.putExtra("title", title);
+                intent.putExtra("vote_average", vote_average);
+
+                startActivity(intent);
             }
         });
         return rootView;
@@ -98,7 +114,7 @@ public class MainActivityFragment extends Fragment {
             JSONObject moviejson = new JSONObject(moviesjson);
             JSONArray moviesarray = moviejson.getJSONArray("results");
 
-            String[] resultStr = new String[moviesarray.length()];
+            resultStr = new String[moviesarray.length()];
 
             for(int i=0;i<moviesarray.length();++i){
                 JSONObject movie = moviesarray.getJSONObject(i);
@@ -106,11 +122,11 @@ public class MainActivityFragment extends Fragment {
                 String poster_path = movie.getString("poster_path");
                 String movieoverview = movie.getString("overview");
                 String split_release_date = movie.getString("release_date");
-                String title = movie.getString("title");
+                String title = movie.getString("original_title");
                 Double vote_average = movie.getDouble("vote_average");
                 String[] parts = split_release_date.split("-");
-                String release_date = parts[2] + "-" + parts[1] + "-" + parts[0];
-                resultStr[i] = poster_path + "-" + movieoverview + "-" + release_date + "-" + title + "-" + vote_average;
+                String release_date = parts[2] + "/" + parts[1] + "/" + parts[0];
+                resultStr[i] = poster_path + "%" + movieoverview + "%" + release_date + "%" + title + "%" + vote_average;
             }
             for(String s:resultStr){
                 Log.v(LOG_TAG, "Movies entry:" + s);
@@ -194,7 +210,7 @@ public class MainActivityFragment extends Fragment {
             if(result!=null){
                 ArrayList<String> urls = new ArrayList<String>(result.length);
                 for(int i=0;i<result.length;++i){
-                    String s = result[i].split("-")[0];
+                    String s = result[i].split("%")[0];
                     urls.add("http://image.tmdb.org/t/p/w185/" + s);
                 }
                 ImageAdapter imageAdapter = new ImageAdapter(getActivity(),urls);
@@ -245,4 +261,6 @@ public class MainActivityFragment extends Fragment {
             return imageView;
         }
     }
+
+
 }
