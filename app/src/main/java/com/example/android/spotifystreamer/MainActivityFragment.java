@@ -1,9 +1,11 @@
 package com.example.android.spotifystreamer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,8 +37,9 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment {
 
     GridView gridview;
-    ArrayList<Uri> list;
-    String category = "popular";
+    //ArrayList<Uri> list;
+    //String category = "popular";
+    String category;
     Integer[] imageIDs = {
             R.drawable.sample_0,
             R.drawable.sample_1,
@@ -71,6 +74,11 @@ public class MainActivityFragment extends Fragment {
 
     private void updateweather(){
 
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        category = shared.getString(getString(R.string.movies_key), "popular");
+        if(category.equals("top_rated")){
+            category = "top_rated";
+        }
         FetchMoviesTask moviesTask = new FetchMoviesTask();
         moviesTask.execute(category);
     }
@@ -156,7 +164,7 @@ public class MainActivityFragment extends Fragment {
                 }
                 moviesjson = buffer.toString();
 
-                Log.v(LOG_TAG, "Movies JSON STring" + moviesjson);
+                Log.v(LOG_TAG, "Movies JSON String" + moviesjson);
             }catch (IOException e){
                 Log.e(LOG_TAG,"Error" , e);
                 return null;
@@ -224,17 +232,17 @@ public class MainActivityFragment extends Fragment {
 
         //---returns an ImageView view---
         public View getView(int position, View convertView, ViewGroup parent)
-        {   View view = null;
+        {   View view;
             ImageView imageView;
             if (convertView == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.fragment_main, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.grid_item_movies, parent, false);
                 imageView = (ImageView) view.findViewById(R.id.grid_item_movies);
             } else {
                 imageView = (ImageView) convertView;
             }
             mpicasso.load(movies.get(position)).into(imageView);
             //imageView.setImageResource(imageIDs[position]);
-            return view;
+            return imageView;
         }
     }
 }
