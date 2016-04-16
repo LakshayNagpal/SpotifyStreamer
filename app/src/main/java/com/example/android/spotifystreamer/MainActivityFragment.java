@@ -41,16 +41,16 @@ public class MainActivityFragment extends Fragment {
     //String category = "popular";
     String category;
     String[] resultStr;
-    Integer[] imageIDs = {
-            R.drawable.sample_0,
-            R.drawable.sample_1,
-            R.drawable.sample_2,
-            R.drawable.sample_3,
-            R.drawable.sample_4,
-            R.drawable.sample_5,
-            R.drawable.sample_6,
-            R.drawable.sample_7
-    };
+//    Integer[] imageIDs = {
+//            R.drawable.sample_0,
+//            R.drawable.sample_1,
+//            R.drawable.sample_2,
+//            R.drawable.sample_3,
+//            R.drawable.sample_4,
+//            R.drawable.sample_5,
+//            R.drawable.sample_6,
+//            R.drawable.sample_7
+//    };
 
     public MainActivityFragment() {
     }
@@ -74,6 +74,7 @@ public class MainActivityFragment extends Fragment {
                 String release_date = resultStr[position].split("%")[2];
                 String title = resultStr[position].split("%")[3];
                 String vote_average = resultStr[position].split("%")[4];
+                String movie_id = resultStr[position].split("%")[5];
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("url", url);
@@ -81,6 +82,7 @@ public class MainActivityFragment extends Fragment {
                 intent.putExtra("release_date", release_date);
                 intent.putExtra("title", title);
                 intent.putExtra("vote_average", vote_average);
+                intent.putExtra("id", movie_id);
 
                 startActivity(intent);
             }
@@ -124,9 +126,10 @@ public class MainActivityFragment extends Fragment {
                 String split_release_date = movie.getString("release_date");
                 String title = movie.getString("original_title");
                 Double vote_average = movie.getDouble("vote_average");
+                Double id = movie.getDouble("id");
                 String[] parts = split_release_date.split("-");
                 String release_date = parts[2] + "/" + parts[1] + "/" + parts[0];
-                resultStr[i] = poster_path + "%" + movieoverview + "%" + release_date + "%" + title + "%" + vote_average;
+                resultStr[i] = poster_path + "%" + movieoverview + "%" + release_date + "%" + title + "%" + vote_average + "%" + id;
             }
             for(String s:resultStr){
                 Log.v(LOG_TAG, "Movies entry:" + s);
@@ -145,7 +148,7 @@ public class MainActivityFragment extends Fragment {
 
             //String baseurl = "http://api.themoviedb.org/3/movie/";
             try{
-                String my_api_key = "abc";
+                String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
                 Uri.Builder builder = new Uri.Builder();
                 builder.scheme("http")
                         .authority("api.themoviedb.org")
