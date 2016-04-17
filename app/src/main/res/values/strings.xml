@@ -5,4 +5,6 @@
     <string name="movies_key">Movies</string>
     <string name="movies_title">Sort By</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_all_trailers">all_trailers</string>
+    <string name="title_activity_all_reviews">all_reviews</string>
 </resources>

@@ -1,7 +1,10 @@
-
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+<LinearLayout
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.spotifystreamer.DetailActivityFragment"
@@ -78,15 +81,66 @@
         android:textColor="#000000"
         android:layout_marginRight="5dp"
         />
-    <ListView
+    <!--<GridView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:numColumns="auto_fit"-->
+        <!--android:id="@+id/gridview1">-->
+    <!--</GridView>-->
+
+    <!--<ListView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/listview1"></ListView>-->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listview1"></ListView>
+        android:text="Trailers"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textAllCaps="true"
+        android:textStyle="bold"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/trailer1"
+        android:onClick="open_trailer"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
 
-    <GridView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numColumns="auto_fit"
-        android:id="@+id/gridview1">
-    </GridView>
+        android:id="@+id/trailer_full_list"
+        android:text="ALL Trailers Here"
+        android:layout_gravity="center_horizontal"
+        android:onClick="trailers_all"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reviews"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textAllCaps="true"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/review1"
+        android:text="No Reviews Found"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/review_full_list"
+        android:text="ALL Reviews Here"
+        android:layout_gravity="center_horizontal"
+        android:onClick="reviews_all"/>
+
 </LinearLayout>
+</ScrollView>

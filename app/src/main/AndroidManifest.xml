@@ -16,6 +16,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,7 +27,7 @@
             android:screenOrientation="nosensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="MainActivity"></meta-data>
+                android:value="MainActivity" />
         </activity>
         <activity
             android:name=".DetailActivity"
@@ -36,6 +37,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.spotifystreamer.MainActivity" />
+        </activity>
+        <activity
+            android:name=".all_trailers"
+            android:label="@string/title_activity_all_trailers"
+            android:parentActivityName=".DetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.spotifystreamer.DetailActivity" />
+        </activity>
+        <activity
+            android:name=".all_reviews"
+            android:label="@string/title_activity_all_reviews"
+            android:parentActivityName=".DetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.spotifystreamer.DetailActivity" />
         </activity>
     </application>
 

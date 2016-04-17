@@ -1,6 +1,5 @@
 package com.example.android.spotifystreamer;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,11 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -222,15 +221,23 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onPostExecute(String[] result){
-            if(result!=null){
-                urls = new ArrayList<String>(result.length);
-                for(int i=0;i<result.length;++i){
-                    urls.add("http://img.youtube.com/vi/" + result[i] + "/1.jpg");
+                ImageView imageView = (ImageView) findViewById(R.id.trailer1);
+                if(result.length!=0){
+                    Picasso.with(getBaseContext()).load("http://img.youtube.com/vi/" + result[0] + "/hqdefault.jpg").into(imageView);
                 }
-                gridview1 = (GridView) findViewById(R.id.gridview1);
-                ImageAdapter imageAdapter = new ImageAdapter(getBaseContext(),urls);
-                gridview1.setAdapter(imageAdapter);
-            }
+                else{
+                    //https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg
+                    Picasso.with(getBaseContext()).load("https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg").into(imageView);
+                }
+
+//                urls = new ArrayList<String>(result.length);
+//                for(int i=0;i<result.length;++i){
+//                    urls.add("http://img.youtube.com/vi/" + result[i] + "/1.jpg");
+//                }
+//                gridview1 = (GridView) findViewById(R.id.gridview1);
+//                ImageAdapter imageAdapter = new ImageAdapter(getBaseContext(),urls);
+//                gridview1.setAdapter(imageAdapter);
+
         }
     }
 
@@ -334,54 +341,90 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onPostExecute(String[] result){
-            if(result!=null){
-                adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.fragment_detail, R.id.listview_textview, result);
+                TextView textView = (TextView) findViewById(R.id.review1);
+                if(result.length!=0) {
+                    textView.setText(result[0]);
+                }
+                else{
+                    textView.setText("No Reviews Found");
+                }
+//                adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.listview_textview, R.id.listview_textview, result);
+//
+//                listview = (ListView) findViewById(R.id.listview1);
+//                listview.setAdapter(adapter);
 
-                listview = (ListView) findViewById(R.id.listview1);
-                listview.setAdapter(adapter);
-            }
         }
     }
 
-    public class ImageAdapter extends BaseAdapter
-    {
-        private Context context;
-        private ArrayList<String> movies;
-        private Picasso mpicasso;;
+//    public class ImageAdapter extends BaseAdapter
+//    {
+//        private Context context;
+//        private ArrayList<String> movies;
+//        private Picasso mpicasso;;
+//
+//        public ImageAdapter(Context c, ArrayList<String> movies)
+//        {
+//            this.context = c;
+//            this.movies = movies;
+//            mpicasso = Picasso.with(context);
+//        }
+//
+//        //---returns the number of images---
+//        public int getCount() {
+//            return movies.size();
+//        }
+//
+//        //---returns the ID of an item---
+//        public Object getItem(int position) {
+//            return position;
+//        }
+//
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        //---returns an ImageView view---
+//        public View getView(int position, View convertView, ViewGroup parent)
+//        {   View view;
+//            ImageView imageView;
+//            if (convertView == null) {
+//                view = LayoutInflater.from(context).inflate(R.layout.grid_item_movies_detail, parent, false);
+//                imageView = (ImageView) view.findViewById(R.id.grid_item_movies_detail);
+//            } else {
+//                imageView = (ImageView) convertView;
+//            }
+//            mpicasso.load(movies.get(position)).into(imageView);
+//            return imageView;
+//        }
+//    }
 
-        public ImageAdapter(Context c, ArrayList<String> movies)
-        {
-            this.context = c;
-            this.movies = movies;
-            mpicasso = Picasso.with(context);
+    public void open_trailer(View view){
+        if(resultStr.length!=0) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[0])));
         }
+    }
 
-        //---returns the number of images---
-        public int getCount() {
-            return movies.size();
+    public void trailers_all(View view){
+        if(resultStr.length!=0){
+
+            Intent intent = new Intent(getBaseContext(),all_trailers.class);
+            intent.putExtra("trailers", resultStr);
+            startActivity(intent);
         }
-
-        //---returns the ID of an item---
-        public Object getItem(int position) {
-            return position;
+        else{
+            Toast.makeText(getBaseContext(), "Sorry, No Trailers Found!", Toast.LENGTH_SHORT).show();
         }
+    }
 
-        public long getItemId(int position) {
-            return position;
+    public void reviews_all(View view){
+        if(resultStr1.length!=0){
+
+            Intent intent = new Intent(getBaseContext(), all_reviews.class);
+            intent.putExtra("reviews",resultStr1);
+            startActivity(intent);
         }
-
-        //---returns an ImageView view---
-        public View getView(int position, View convertView, ViewGroup parent)
-        {   View view;
-            ImageView imageView;
-            if (convertView == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.grid_item_movies_detail, parent, false);
-                imageView = (ImageView) view.findViewById(R.id.grid_item_movies_detail);
-            } else {
-                imageView = (ImageView) convertView;
-            }
-            mpicasso.load(movies.get(position)).into(imageView);
-            return imageView;
+        else{
+            Toast.makeText(getBaseContext(), "Sorry, No Reviews Found!", Toast.LENGTH_SHORT).show();
         }
     }
 }
