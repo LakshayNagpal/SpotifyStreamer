@@ -115,7 +115,11 @@
         android:id="@+id/trailer_full_list"
         android:text="ALL Trailers Here"
         android:layout_gravity="center_horizontal"
-        android:onClick="trailers_all"/>
+        android:onClick="trailers_all"
+        android:background="#000000"
+        android:textColor="#ffffff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -140,7 +144,12 @@
         android:id="@+id/review_full_list"
         android:text="ALL Reviews Here"
         android:layout_gravity="center_horizontal"
-        android:onClick="reviews_all"/>
+        android:onClick="reviews_all"
+        android:background="#000000"
+        android:textColor="#ffffff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginBottom="15dp"/>
 
 </LinearLayout>
 </ScrollView>

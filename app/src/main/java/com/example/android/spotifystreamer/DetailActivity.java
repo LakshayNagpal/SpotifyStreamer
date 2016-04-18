@@ -166,7 +166,7 @@ public class DetailActivity extends AppCompatActivity {
                         .appendPath("movie")
                         .appendPath(params[0])
                         .appendQueryParameter("api_key", my_api_key)
-                        .appendQueryParameter("append_to_response", "trailers,reviews");
+                        .appendQueryParameter("append_to_response", "trailers");
 
                 String myurl = builder.build().toString();
                 URL url = new URL(myurl);
@@ -286,7 +286,7 @@ public class DetailActivity extends AppCompatActivity {
                         .appendPath("movie")
                         .appendPath(params[0])
                         .appendQueryParameter("api_key", my_api_key)
-                        .appendQueryParameter("append_to_response", "trailers,reviews");
+                        .appendQueryParameter("append_to_response", "reviews");
 
                 String myurl = builder.build().toString();
                 URL url = new URL(myurl);
