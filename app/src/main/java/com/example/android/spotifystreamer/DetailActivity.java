@@ -79,12 +79,15 @@ public class DetailActivity extends AppCompatActivity {
     static String url;
     ArrayAdapter<String> adapter;
     ArrayList<String> urls;
+    static boolean isfavorite = false;
+    private static long movieId;
 
     public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+        public static final String LOG_TAG = DetailFragment.class.getSimpleName();
         private final static int MOVIE_DETAIL_LOADER = 0;
         private final static int FAVORITE_LOADER = 1;
-        boolean isfavorite = false;
+
 
         private static final String[] MOVIE_COLUMNS = {
 
@@ -132,26 +135,28 @@ public class DetailActivity extends AppCompatActivity {
             Intent intent = getActivity().getIntent();
             View rootview =  inflater.inflate(R.layout.fragment_detail, container, false);
 
-            if(intent!=null && intent.hasExtra("overview") && intent.hasExtra("release_date") && intent.hasExtra("title") && intent.hasExtra("vote_average") && intent.hasExtra("id")){
-                String overview = intent.getStringExtra("overview");
-                ((TextView) rootview.findViewById(R.id.detail_text)).setText(overview);
-
-                String release_date = intent.getStringExtra("release_date");
-                ((TextView) rootview.findViewById(R.id.detail_text1)).setText(release_date);
-
-                String title = intent.getStringExtra("title");
-                ((TextView) rootview.findViewById(R.id.detail_text2)).setText(title);
-
-                String votes = intent.getStringExtra("vote_average");
-                ((TextView) rootview.findViewById(R.id.detail_text3)).setText(votes);
-
-                movie_id = intent.getStringExtra("id");
-                url = intent.getStringExtra("url");
+            if(intent!=null){
+//                String overview = intent.getStringExtra("overview");
+//                ((TextView) rootview.findViewById(R.id.detail_text)).setText(overview);
+//
+//                String release_date = intent.getStringExtra("release_date");
+//                ((TextView) rootview.findViewById(R.id.detail_text1)).setText(release_date);
+//
+//                String title = intent.getStringExtra("title");
+//                ((TextView) rootview.findViewById(R.id.detail_text2)).setText(title);
+//
+//                String votes = intent.getStringExtra("vote_average");
+//                ((TextView) rootview.findViewById(R.id.detail_text3)).setText(votes);
+//
+//                movie_id = intent.getStringExtra("id");
+                movieId = intent.getLongExtra(Intent.EXTRA_TEXT,0);
+                Log.v(LOG_TAG, "Movie iD" + movieId);
+                //url = intent.getStringExtra("url");
             }
 
-            String final_url = "http://image.tmdb.org/t/p/w185/" + url;
-            ImageView i = (ImageView) rootview.findViewById(R.id.image_view1);
-            Picasso.with(getActivity()).load(final_url).into(i);
+//            String final_url = "http://image.tmdb.org/t/p/w185/" + url;
+//            ImageView i = (ImageView) rootview.findViewById(R.id.image_view1);
+//            Picasso.with(getActivity()).load(final_url).into(i);
 
             return rootview;
         }
@@ -168,7 +173,7 @@ public class DetailActivity extends AppCompatActivity {
 
             switch (id){
                 case MOVIE_DETAIL_LOADER:{
-                    Uri uri = MovieContract.MovieEntry.buildMovieUri(Long.parseLong(movie_id));
+                    Uri uri = MovieContract.MovieEntry.buildMovieUri(movieId);
                     return new CursorLoader(
                             getActivity(),
                             uri,
@@ -179,7 +184,7 @@ public class DetailActivity extends AppCompatActivity {
                     );
                 }
                 case FAVORITE_LOADER:{
-                    Uri uri = MovieContract.FavoriteEntry.buildFavouriteUri(Long.parseLong(movie_id));
+                    Uri uri = MovieContract.FavoriteEntry.buildFavouriteUri(movieId);
                     return new CursorLoader(
                             getActivity(),
                             uri,
@@ -202,6 +207,14 @@ public class DetailActivity extends AppCompatActivity {
 
             switch(loader.getId()){
                 case MOVIE_DETAIL_LOADER:{
+
+                    ((TextView) getView().findViewById(R.id.detail_text)).setText(data.getString(COL_MOVIE_OVERVIEW));
+                    ((TextView) getView().findViewById(R.id.detail_text1)).setText(data.getString(COL_RELEASE_DATE));
+                    ((TextView) getView().findViewById(R.id.detail_text2)).setText(data.getString(COL_TITLE));
+                    ((TextView) getView().findViewById(R.id.detail_text3)).setText(data.getString(COL_USER_RATING));
+                    ImageView i = (ImageView) getView().findViewById(R.id.image_view1);
+                    Picasso .with(getActivity()).load(data.getString(COL_MOVIE_POSTER)).into(i);
+
                     final String title = data.getString(COL_TITLE);
                     final String poster = data.getString(COL_MOVIE_POSTER);
                     final String mov_id = data.getString(COL_MOVIE_ID);
@@ -241,10 +254,10 @@ public class DetailActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         FetchTrailerTask moviesTask = new FetchTrailerTask();
-        moviesTask.execute(movie_id);
+        moviesTask.execute(String.valueOf(movieId));
 
         FetchReviewDetail reviews = new FetchReviewDetail();
-        reviews.execute(movie_id);
+        reviews.execute(String.valueOf(movieId));
     }
 
     public class FetchTrailerTask extends AsyncTask<String, Void, String[]>{

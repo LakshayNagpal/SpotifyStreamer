@@ -1,6 +1,5 @@
 package com.example.android.spotifystreamer;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -22,7 +21,7 @@ import com.example.android.spotifystreamer.data.MovieContract;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     GridView gridview;
     String category;
@@ -98,38 +97,37 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     ((Callback)getActivity()).onItemSelected(cursor.getLong(COL_MOVIE_ID));
                     mPosition = position;
 
-                    String url = resultStr[position].split("%")[0];
-                    String movieoverview = resultStr[position].split("%")[1];
-                    String release_date = resultStr[position].split("%")[2];
-                    String title = resultStr[position].split("%")[3];
-                    String vote_average = resultStr[position].split("%")[4];
-                    String movie_id = resultStr[position].split("%")[5];
-
-                    Intent intent = new Intent(getActivity(), DetailActivity.class);
-                    intent.putExtra("url", url);
-                    intent.putExtra("overview", movieoverview);
-                    intent.putExtra("release_date", release_date);
-                    intent.putExtra("title", title);
-                    intent.putExtra("vote_average", vote_average);
-                    intent.putExtra("id", movie_id);
-
-                    startActivity(intent);
+//                    String url = resultStr[position].split("%")[0];
+//                    String movieoverview = resultStr[position].split("%")[1];
+//                    String release_date = resultStr[position].split("%")[2];
+//                    String title = resultStr[position].split("%")[3];
+//                    String vote_average = resultStr[position].split("%")[4];
+//                    String movie_id = resultStr[position].split("%")[5];
+//
+//                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+//                    intent.putExtra("url", url);
+//                    intent.putExtra("overview", movieoverview);
+//                    intent.putExtra("release_date", release_date);
+//                    intent.putExtra("title", title);
+//                    intent.putExtra("vote_average", vote_average);
+//                    intent.putExtra("id", movie_id);
+//
+//                    startActivity(intent);
                 }
             }
         });
         return rootView;
     }
 
-    private void updateweather(){
+    private void updateweather() {
 
-        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        category = shared.getString(getString(R.string.movies_key), "popular");
-        if(category.equals("top_rated")){
-            category = "top_rated";
-        }
+//        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        category = shared.getString(getString(R.string.movies_key), "popular");
+//        if(category!="favorites") {
         FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
-        moviesTask.execute(category);
+        moviesTask.execute();
         movieadapter.notifyDataSetChanged();
+    //}
     }
 
     @Override

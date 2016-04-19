@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback {
 
 
 
@@ -54,4 +54,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(long movieId) {
+        Intent intent = new Intent(this, DetailActivity.class)
+                .putExtra(Intent.EXTRA_TEXT, movieId);
+        startActivity(intent);
+    }
 }

@@ -2,7 +2,6 @@ package com.example.android.spotifystreamer;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -86,20 +85,23 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
         BufferedReader reader = null;
         String moviesjson = null;
 
-        //String baseurl = "http://api.themoviedb.org/3/movie/";
-        try{
-            String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http")
-                    .authority("api.themoviedb.org")
-                    .appendPath("3")
-                    .appendPath("movie")
-                    .appendPath(params[0])
-                    .appendQueryParameter("api_key", my_api_key);
 
-            String myurl = builder.build().toString();
-            URL url = new URL(myurl);
-            Log.v(LOG_TAG, "Built url" + myurl);
+        try{
+            String baseurl = "http://api.themoviedb.org/3/discover/movie?";
+            String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+
+//            Uri.Builder builder = new Uri.Builder();
+//            builder.scheme("http")
+//                    .authority("api.themoviedb.org")
+//                    .appendPath("3")
+//                    .appendPath("movie")
+//                    .appendPath(params[0])
+//                    .appendQueryParameter("api_key", my_api_key);
+//
+//            String myurl = builder.build().toString();
+
+            URL url = new URL(baseurl + "&api_key=" + my_api_key);
+            Log.v(LOG_TAG, "Built url" + url);
 
             urlconnection = (HttpURLConnection) url.openConnection();
             urlconnection.setRequestMethod("GET");
