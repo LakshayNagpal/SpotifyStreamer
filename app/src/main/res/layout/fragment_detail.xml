@@ -70,6 +70,16 @@
             android:textSize="20sp"
             android:layout_marginTop="8dp"
             />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:text="Mark this movie as favorite"
+            android:textColor="#FFFFFF"
+            android:layout_below="@id/detail_text3"
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/fav_button"/>
     </RelativeLayout>
     </LinearLayout>
 

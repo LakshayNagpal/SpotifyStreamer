@@ -4,10 +4,12 @@
     <string-array name="movies_entries">
         <item>Popular</item>
         <item>Top Rated</item>
+        <item>Favorites</item>
     </string-array>
     <string-array name="movies_values">
         <item>popular</item>
         <item>top_rated</item>
+        <item>favorites</item>
     </string-array>
 
 </resources>

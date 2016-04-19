@@ -1,10 +1,15 @@
 package com.example.android.spotifystreamer;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,12 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.spotifystreamer.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -71,12 +76,51 @@ public class DetailActivity extends AppCompatActivity {
     public static String movie_id;
     static String[] resultStr;
     static String[] resultStr1;
-    static GridView gridview1;
     static String url;
-    static ListView listview;
     ArrayAdapter<String> adapter;
     ArrayList<String> urls;
-    public static class DetailFragment extends Fragment {
+
+    public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+        private final static int MOVIE_DETAIL_LOADER = 0;
+        private final static int FAVORITE_LOADER = 1;
+        boolean isfavorite = false;
+
+        private static final String[] MOVIE_COLUMNS = {
+
+                MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry._ID,
+                MovieContract.MovieEntry.COLUMN_TITLE,
+                MovieContract.MovieEntry.COLUMN_MOVIE_POSTER,
+                MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW,
+                MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
+                MovieContract.MovieEntry.COLUMN_USER_RATING,
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID
+        };
+
+        static final int COL_TITLE = 1;
+        static final int COL_MOVIE_POSTER = 2;
+        static final int COL_MOVIE_OVERVIEW = 3;
+        static final int COL_RELEASE_DATE = 4;
+        static final int COL_USER_RATING = 5;
+        static final int COL_MOVIE_ID = 6;
+
+        private static final String[] FAVORITE_COLUMNS = {
+
+                MovieContract.FavoriteEntry.TABLE_NAME + "." + MovieContract.FavoriteEntry._ID,
+                MovieContract.FavoriteEntry.COLUMN_TITLE,
+                MovieContract.FavoriteEntry.COLUMN_MOVIE_POSTER,
+                MovieContract.FavoriteEntry.COLUMN_MOVIE_OVERVIEW,
+                MovieContract.FavoriteEntry.COLUMN_RELEASE_DATE,
+                MovieContract.FavoriteEntry.COLUMN_USER_RATING,
+                MovieContract.FavoriteEntry.COLUMN_MOVIE_ID
+        };
+
+        static final int COL_FAV_TITLE = 1;
+        static final int COL_FAV_MOVIE_POSTER = 2;
+        static final int COL_FAV_MOVIE_OVERVIEW = 3;
+        static final int COL_FAV_RELEASE_DATE = 4;
+        static final int COL_FAV_USER_RATING = 5;
+        static final int COL_FAV_MOVIE_ID = 6;
 
         public DetailFragment() {
             setHasOptionsMenu(true);
@@ -111,20 +155,100 @@ public class DetailActivity extends AppCompatActivity {
 
             return rootview;
         }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState){
+            getLoaderManager().initLoader(MOVIE_DETAIL_LOADER, null, this);
+            getLoaderManager().initLoader(FAVORITE_LOADER, null, this);
+            super.onActivityCreated(savedInstanceState);
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+            switch (id){
+                case MOVIE_DETAIL_LOADER:{
+                    Uri uri = MovieContract.MovieEntry.buildMovieUri(Long.parseLong(movie_id));
+                    return new CursorLoader(
+                            getActivity(),
+                            uri,
+                            MOVIE_COLUMNS,
+                            null,
+                            null,
+                            null
+                    );
+                }
+                case FAVORITE_LOADER:{
+                    Uri uri = MovieContract.FavoriteEntry.buildFavouriteUri(Long.parseLong(movie_id));
+                    return new CursorLoader(
+                            getActivity(),
+                            uri,
+                            FAVORITE_COLUMNS,
+                            null,
+                            null,
+                            null
+                    );
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+            if(data.moveToFirst() == false){
+                return ;
+            }
+
+            switch(loader.getId()){
+                case MOVIE_DETAIL_LOADER:{
+                    final String title = data.getString(COL_TITLE);
+                    final String poster = data.getString(COL_MOVIE_POSTER);
+                    final String mov_id = data.getString(COL_MOVIE_ID);
+                    final String overview = data.getString(COL_MOVIE_OVERVIEW);
+                    final String rel_date = data.getString(COL_RELEASE_DATE);
+                    final String user_rat = data.getString(COL_USER_RATING);
+
+                    Button fav_button = (Button) getView().findViewById(R.id.fav_button);
+                    fav_button.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v){
+                            if(isfavorite == false){
+                                ContentValues c = new ContentValues();
+                                c.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_ID, mov_id);
+                                c.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_OVERVIEW, overview);
+                                c.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_POSTER, poster);
+                                c.put(MovieContract.FavoriteEntry.COLUMN_RELEASE_DATE, rel_date);
+                                c.put(MovieContract.FavoriteEntry.COLUMN_TITLE, title);
+                                c.put(MovieContract.FavoriteEntry.COLUMN_USER_RATING, user_rat);
+                            }
+                        }
+                    });
+                }
+                case FAVORITE_LOADER:{
+
+                }
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        FetchMovieDetail moviesTask = new FetchMovieDetail();
+        FetchTrailerTask moviesTask = new FetchTrailerTask();
         moviesTask.execute(movie_id);
 
         FetchReviewDetail reviews = new FetchReviewDetail();
         reviews.execute(movie_id);
     }
 
-    public class FetchMovieDetail extends AsyncTask<String, Void, String[]>{
-        private final String LOG_TAG = FetchMovieDetail.class.getSimpleName();
+    public class FetchTrailerTask extends AsyncTask<String, Void, String[]>{
+        private final String LOG_TAG = FetchTrailerTask.class.getSimpleName();
 
         private String[] getMovieDetailFromJSON(String detailjson)
                 throws JSONException {
