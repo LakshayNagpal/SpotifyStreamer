@@ -56,6 +56,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.spotifystreamer.DetailActivity" />
         </activity>
+        
+        <provider
+            android:authorities="com.example.android.spotifystreamer"
+            android:name=".data.MovieProvider"/>
     </application>
 
 </manifest>
