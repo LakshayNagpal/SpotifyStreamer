@@ -364,7 +364,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
                 else{
                     //https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg
-                    Picasso.with(getBaseContext()).load("https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg").into(imageView);
+                    Picasso.with(getBaseContext()).load(R.drawable.hqdefault).into(imageView);
                 }
 
 //                urls = new ArrayList<String>(result.length);

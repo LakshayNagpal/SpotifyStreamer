@@ -121,13 +121,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     private void updateweather() {
 
+//        Log.v(LOG_TAG, "updateweather function called");
 //        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
 //        category = shared.getString(getString(R.string.movies_key), "popular");
 //        if(category!="favorites") {
         FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
         moviesTask.execute();
         movieadapter.notifyDataSetChanged();
-    //}
+  //  }
     }
 
     @Override
@@ -144,10 +145,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.v(LOG_TAG, "oncreateloader function called");
         SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
         category1 = shared.getString(getString(R.string.movies_key), "popular");
         Uri favoriteMovieUri = MovieContract.FavoriteEntry.CONTENT_URI;
-        if(category1 == "favorites"){
+        if(category1.equals("favorites")){
             return new CursorLoader(
                     getActivity(),
                     favoriteMovieUri,

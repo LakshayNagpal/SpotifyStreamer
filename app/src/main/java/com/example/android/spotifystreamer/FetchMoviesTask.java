@@ -101,6 +101,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 //            String myurl = builder.build().toString();
 
             URL url = new URL(baseurl + "&api_key=" + my_api_key);
+            //URL url = new URL(myurl);
             Log.v(LOG_TAG, "Built url" + url);
 
             urlconnection = (HttpURLConnection) url.openConnection();
