@@ -68,7 +68,12 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
             if(cvvector.size()>0){
                 ContentValues[] cvarray = new ContentValues[cvvector.size()];
                 cvvector.toArray(cvarray);
+
+                context.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+
                 inserted = context.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvarray);
+
+
             }
             Log.v(LOG_TAG, "FetchMovieTask Complete. " + inserted + " Inserted");
         }catch (JSONException e){
