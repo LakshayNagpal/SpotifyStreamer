@@ -121,14 +121,17 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     private void updateweather() {
 
-//        Log.v(LOG_TAG, "updateweather function called");
-//        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        category = shared.getString(getString(R.string.movies_key), "popular");
-//        if(category!="favorites") {
+        Log.v(LOG_TAG, "updateweather function called");
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        category = shared.getString(getString(R.string.movies_key), "popular");
+        Log.v(LOG_TAG, "update weather called");
+        if(category!="favorites") {
+            Log.v(LOG_TAG, "if condition in update weather called");
+
         FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
-        moviesTask.execute();
+        moviesTask.execute(category);
         movieadapter.notifyDataSetChanged();
-  //  }
+        }
     }
 
     @Override
