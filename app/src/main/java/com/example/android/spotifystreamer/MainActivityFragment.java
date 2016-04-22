@@ -124,13 +124,49 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         Log.v(LOG_TAG, "updateweather function called");
         SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
         category = shared.getString(getString(R.string.movies_key), "popular");
-        Log.v(LOG_TAG, "update weather called");
-        if(category!="favorites") {
-            Log.v(LOG_TAG, "if condition in update weather called" + category);
+//        Log.v(LOG_TAG, "update weather called");
+//        if(!category.equals("favorites")) {
+//            Log.v(LOG_TAG, "if condition in update weather called" + category);
+//
+//        FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
+//        moviesTask.execute(category);
+//        movieadapter.notifyDataSetChanged();
+//        }
 
-        FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
-        moviesTask.execute(category);
-        movieadapter.notifyDataSetChanged();
+        switch (category){
+            case "favorites":{
+                Log.v(LOG_TAG, "Favorites settings called");
+                Cursor favcursor = getContext().getContentResolver().query(
+                        MovieContract.FavoriteEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+                MovieGridViewAdapter movieadapter1;
+                movieadapter1 = new MovieGridViewAdapter(getActivity(),favcursor,0);
+                gridview.setAdapter(movieadapter1);
+
+//                while(favcursor.moveToNext()){
+//
+//                }
+
+                break;
+            }
+            case "popular":{
+                Log.v(LOG_TAG, "Popular settings called");
+                FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
+                moviesTask.execute("popular");
+                movieadapter.notifyDataSetChanged();
+                break;
+            }
+            case "top_rated":{
+                Log.v(LOG_TAG, "Top Rated settings called");
+                FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
+                moviesTask.execute("top_rated");
+                movieadapter.notifyDataSetChanged();
+                break;
+            }
         }
     }
 
