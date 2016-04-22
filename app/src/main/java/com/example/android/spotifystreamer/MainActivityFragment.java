@@ -143,10 +143,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                         null,
                         null
                 );
+
+                Log.v(LOG_TAG, "count of cursor" + favcursor.getCount());
                 MovieGridViewAdapter movieadapter1;
                 movieadapter1 = new MovieGridViewAdapter(getActivity(),favcursor,0);
                 gridview.setAdapter(movieadapter1);
-
 //                while(favcursor.moveToNext()){
 //
 //                }

@@ -232,11 +232,17 @@ public class DetailActivity extends AppCompatActivity {
                             if(isfavorite == false){
                                 ContentValues c = new ContentValues();
                                 c.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_ID, mov_id);
+                                Log.v(LOG_TAG, "movie Id inserted" + mov_id);
                                 c.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_OVERVIEW, overview);
+                                Log.v(LOG_TAG, "oevrview inserted" + overview);
                                 c.put(MovieContract.FavoriteEntry.COLUMN_MOVIE_POSTER, poster);
+                                Log.v(LOG_TAG, "poster inserted" + poster);
                                 c.put(MovieContract.FavoriteEntry.COLUMN_RELEASE_DATE, rel_date);
+                                Log.v(LOG_TAG, "release date inserted" + rel_date);
                                 c.put(MovieContract.FavoriteEntry.COLUMN_TITLE, title);
+                                Log.v(LOG_TAG, "title inserted" + title);
                                 c.put(MovieContract.FavoriteEntry.COLUMN_USER_RATING, user_rat);
+                                Log.v(LOG_TAG, "User Rating  inserted" + user_rat);
 
                                 vectorvalues.add(c);
 
@@ -245,8 +251,8 @@ public class DetailActivity extends AppCompatActivity {
                                     ContentValues[] cvarray = new ContentValues[vectorvalues.size()];
                                     vectorvalues.toArray(cvarray);
 
-                                    inserted = getActivity().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvarray);
-                                    isfavorite = true;
+                                    inserted = getActivity().getContentResolver().bulkInsert(MovieContract.FavoriteEntry.CONTENT_URI, cvarray);
+                                    //isfavorite = true;
                                     Toast.makeText(getActivity(), "Movie Added to Favorites Section", Toast.LENGTH_SHORT).show();
 
                                     Log.v(LOG_TAG, "Favorites complete" + inserted + "Inserted.");
@@ -314,7 +320,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
             try{
-                String my_api_key = "abc";
+                String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
                 Uri.Builder builder = new Uri.Builder();
                 builder.scheme("http")
                         .authority("api.themoviedb.org")
@@ -434,7 +440,7 @@ public class DetailActivity extends AppCompatActivity {
             String detailjson = null;
 
             try{
-                String my_api_key = "abc";
+                String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
                 Uri.Builder builder = new Uri.Builder();
                 builder.scheme("http")
                         .authority("api.themoviedb.org")
