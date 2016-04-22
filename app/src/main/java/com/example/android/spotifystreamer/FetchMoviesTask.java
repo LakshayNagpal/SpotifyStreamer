@@ -73,8 +73,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 
                 inserted = context.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvarray);
 
-
             }
+
             Log.v(LOG_TAG, "FetchMovieTask Complete. " + inserted + " Inserted");
         }catch (JSONException e){
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -92,6 +92,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
         BufferedReader reader = null;
         String moviesjson = null;
 
+        Log.v(LOG_TAG, "the parameter is " + params[0]);
 
         try{
             //String baseurl = "http://api.themoviedb.org/3/discover/movie?";

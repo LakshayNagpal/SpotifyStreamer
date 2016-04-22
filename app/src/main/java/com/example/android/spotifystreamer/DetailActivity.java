@@ -38,6 +38,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -84,12 +85,12 @@ public class DetailActivity extends AppCompatActivity {
 
     public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-        public static final String LOG_TAG = DetailFragment.class.getSimpleName();
+        public final String LOG_TAG = DetailFragment.class.getSimpleName();
         private final static int MOVIE_DETAIL_LOADER = 0;
         private final static int FAVORITE_LOADER = 1;
 
 
-        private static final String[] MOVIE_COLUMNS = {
+        private final String[] MOVIE_COLUMNS = {
 
                 MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry._ID,
                 MovieContract.MovieEntry.COLUMN_TITLE,
@@ -107,7 +108,7 @@ public class DetailActivity extends AppCompatActivity {
         static final int COL_USER_RATING = 5;
         static final int COL_MOVIE_ID = 6;
 
-        private static final String[] FAVORITE_COLUMNS = {
+        private final String[] FAVORITE_COLUMNS = {
 
                 MovieContract.FavoriteEntry.TABLE_NAME + "." + MovieContract.FavoriteEntry._ID,
                 MovieContract.FavoriteEntry.COLUMN_TITLE,
@@ -222,6 +223,8 @@ public class DetailActivity extends AppCompatActivity {
                     final String rel_date = data.getString(COL_RELEASE_DATE);
                     final String user_rat = data.getString(COL_USER_RATING);
 
+                    final Vector<ContentValues> vectorvalues = new Vector<ContentValues>(2);
+
                     Button fav_button = (Button) getView().findViewById(R.id.fav_button);
                     fav_button.setOnClickListener(new View.OnClickListener(){
                         @Override
@@ -234,6 +237,21 @@ public class DetailActivity extends AppCompatActivity {
                                 c.put(MovieContract.FavoriteEntry.COLUMN_RELEASE_DATE, rel_date);
                                 c.put(MovieContract.FavoriteEntry.COLUMN_TITLE, title);
                                 c.put(MovieContract.FavoriteEntry.COLUMN_USER_RATING, user_rat);
+
+                                vectorvalues.add(c);
+
+                                int inserted = 0;
+                                if(vectorvalues.size()>0){
+                                    ContentValues[] cvarray = new ContentValues[vectorvalues.size()];
+                                    vectorvalues.toArray(cvarray);
+
+                                    inserted = getActivity().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvarray);
+
+                                    Toast.makeText(getActivity(), "Movie Added to Favorites Section", Toast.LENGTH_SHORT).show();
+
+                                    Log.v(LOG_TAG, "Favorites complete" + inserted + "Inserted.");
+
+                                }
                             }
                         }
                     });
@@ -293,6 +311,7 @@ public class DetailActivity extends AppCompatActivity {
             HttpURLConnection urlconnection = null;
             BufferedReader reader = null;
             String detailjson = null;
+
 
             try{
                 String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";

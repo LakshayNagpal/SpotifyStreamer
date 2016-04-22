@@ -126,7 +126,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         category = shared.getString(getString(R.string.movies_key), "popular");
         Log.v(LOG_TAG, "update weather called");
         if(category!="favorites") {
-            Log.v(LOG_TAG, "if condition in update weather called");
+            Log.v(LOG_TAG, "if condition in update weather called" + category);
 
         FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
         moviesTask.execute(category);
