@@ -28,6 +28,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     String category1;
     String[] resultStr;
     MovieGridViewAdapter movieadapter;
+    MovieGridViewAdapter movieadapter1;
 
 //    Integer[] imageIDs = {
 //            R.drawable.sample_0,
@@ -144,10 +145,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                         null
                 );
 
-                Log.v(LOG_TAG, "count of cursor" + favcursor.getCount());
-                MovieGridViewAdapter movieadapter1;
-                movieadapter1 = new MovieGridViewAdapter(getActivity(),favcursor,0);
-                gridview.setAdapter(movieadapter1);
+                Log.v(LOG_TAG, "count of fav cursor" + favcursor.getCount());
+
+                movieadapter = new MovieGridViewAdapter(getActivity(),favcursor,0);
+                gridview.setAdapter(movieadapter);
+
 //                while(favcursor.moveToNext()){
 //
 //                }
@@ -158,17 +160,40 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 Log.v(LOG_TAG, "Popular settings called");
                 FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
                 moviesTask.execute("popular");
-                movieadapter.notifyDataSetChanged();
+                Cursor popcursor = getContext().getContentResolver().query(
+                        MovieContract.MovieEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+                Log.v(LOG_TAG, "count of pop cursor" + popcursor.getCount());
+
+                movieadapter = new MovieGridViewAdapter(getActivity(),popcursor,0);
+                gridview.setAdapter(movieadapter);
+
                 break;
             }
             case "top_rated":{
                 Log.v(LOG_TAG, "Top Rated settings called");
                 FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
                 moviesTask.execute("top_rated");
-                movieadapter.notifyDataSetChanged();
+
+                Cursor topcursor = getContext().getContentResolver().query(
+                        MovieContract.MovieEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+                Log.v(LOG_TAG, "count of top cursor" + topcursor.getCount());
+
+                movieadapter = new MovieGridViewAdapter(getActivity(),topcursor,0);
+                gridview.setAdapter(movieadapter);
                 break;
             }
         }
+        movieadapter.notifyDataSetChanged();
     }
 
     @Override
