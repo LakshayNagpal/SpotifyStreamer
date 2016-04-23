@@ -58,13 +58,13 @@ public class MovieContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVORITE;
 
         public static final String TABLE_NAME = "favorite";
-
-        public static final String COLUMN_MOVIE_ID = "movie_id";//Foreign Key
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_MOVIE_POSTER = "poster";
         public static final String COLUMN_MOVIE_OVERVIEW = "overview";
         public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_USER_RATING = "user_rating";
+
+        public static final String COLUMN_MOVIE_ID = "movie_id";//Foreign Key
 
         public static Uri getMovieIdFromUri(String movieId){
             return CONTENT_URI.buildUpon().appendPath(movieId).build();

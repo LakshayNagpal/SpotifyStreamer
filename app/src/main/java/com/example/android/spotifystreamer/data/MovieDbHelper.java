@@ -13,7 +13,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     private final String LOG_TAG = MovieDbHelper.class.getSimpleName();
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "movie.db";
 
     public MovieDbHelper(Context context){
@@ -35,12 +35,12 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_FAVOURITE_TABLE = "CREATE TABLE " + FavoriteEntry.TABLE_NAME + " (" +
                 FavoriteEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                FavoriteEntry.COLUMN_MOVIE_ID+ " INTEGER UNIQUE ON CONFLICT REPLACE NOT NULL ON CONFLICT ABORT, " +
                 FavoriteEntry.COLUMN_TITLE+" TEXT NOT NULL, "+
                 FavoriteEntry.COLUMN_MOVIE_POSTER+" TEXT NOT NULL, "+
                 FavoriteEntry.COLUMN_MOVIE_OVERVIEW+" TEXT NOT NULL, "+
                 FavoriteEntry.COLUMN_RELEASE_DATE+" TEXT NOT NULL, "+
-                FavoriteEntry.COLUMN_USER_RATING+" REAL NOT NULL "+
+                FavoriteEntry.COLUMN_USER_RATING+" REAL NOT NULL, "+
+                FavoriteEntry.COLUMN_MOVIE_ID+ " INTEGER UNIQUE ON CONFLICT REPLACE NOT NULL ON CONFLICT ABORT " +
                 " );";
 
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_TABLE);
@@ -50,8 +50,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion){
 
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS" + MovieEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS" + FavoriteEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FavoriteEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

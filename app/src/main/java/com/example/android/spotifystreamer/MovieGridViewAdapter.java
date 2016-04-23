@@ -48,12 +48,16 @@ public class MovieGridViewAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor){
         DatabaseUtils.dumpCursor(cursor);
+        Log.v(LOG_TAG, "bind view called" + cursor.getCount());
         String[] bind = convertCursorRowToUXFormat(cursor);
+        Log.v(LOG_TAG, "cursor contents" + bind[0] + bind[1] + bind[2] + bind[3]);
         ImageView imageView = (ImageView) view.findViewById(R.id.grid_item_movies);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         if(imageView!=null){
+            Log.v(LOG_TAG, "imageview in bindview called");
             Uri uri = Uri.parse("http://image.tmdb.org/t/p/w185/" + bind[1]);
+            Log.v(LOG_TAG, "Image uri in bindview" + uri);
             Picasso.with(context).load(uri).into(imageView);
             imageView.setAdjustViewBounds(true);
         }
