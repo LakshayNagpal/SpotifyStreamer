@@ -261,9 +261,15 @@ public class DetailActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    break;
                 }
                 case FAVORITE_LOADER:{
-
+                    ((TextView) getView().findViewById(R.id.detail_text)).setText(data.getString(COL_MOVIE_OVERVIEW));
+                    ((TextView) getView().findViewById(R.id.detail_text1)).setText(data.getString(COL_RELEASE_DATE));
+                    ((TextView) getView().findViewById(R.id.detail_text2)).setText(data.getString(COL_TITLE));
+                    ((TextView) getView().findViewById(R.id.detail_text3)).setText(data.getString(COL_USER_RATING));
+                    ImageView i = (ImageView) getView().findViewById(R.id.image_view1);
+                    Picasso .with(getActivity()).load(data.getString(COL_MOVIE_POSTER)).into(i);
                 }
             }
         }
