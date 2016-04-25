@@ -20,6 +20,7 @@
         android:background="#000000"
         android:gravity="center_horizontal"
         android:padding="15dp"
+        android:text="No Movie Selected"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,6 +50,7 @@
             android:id="@+id/detail_text1"
             android:layout_marginLeft="10dp"
             android:textSize="20sp"
+            android:text="No Movie Selected"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -59,6 +61,7 @@
             android:layout_below="@id/detail_text1"
             android:textSize="20sp"
             android:layout_marginTop="8dp"
+            android:text="0.0"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -79,7 +82,8 @@
             android:layout_below="@id/detail_text3"
             android:textSize="15sp"
             android:layout_marginTop="10dp"
-            android:id="@+id/fav_button"/>
+            android:id="@+id/fav_button"
+            android:padding="8dp"/>
     </RelativeLayout>
     </LinearLayout>
 

@@ -81,8 +81,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public static String movie_id;
-    static String[] resultStr;
-    static String[] resultStr1;
+    public static String[] resultStr;
+    public static String[] resultStr1;
     static String url;
     ArrayAdapter<String> adapter;
     ArrayList<String> urls;
@@ -281,130 +281,126 @@ public class DetailActivity extends AppCompatActivity {
                     Picasso .with(getActivity()).load(data.getString(COL_MOVIE_POSTER)).into(i);
                 }
             }
+
+            FetchTrailerTask moviesTask = new FetchTrailerTask();
+            moviesTask.execute(String.valueOf(movieId));
+
+            FetchReviewDetail reviews = new FetchReviewDetail();
+            reviews.execute(String.valueOf(movieId));
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
 
         }
-    }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        FetchTrailerTask moviesTask = new FetchTrailerTask();
-        moviesTask.execute(String.valueOf(movieId));
 
-        FetchReviewDetail reviews = new FetchReviewDetail();
-        reviews.execute(String.valueOf(movieId));
-    }
+        public class FetchTrailerTask extends AsyncTask<String, Void, String[]>{
+            private final String LOG_TAG = FetchTrailerTask.class.getSimpleName();
 
-    public class FetchTrailerTask extends AsyncTask<String, Void, String[]>{
-        private final String LOG_TAG = FetchTrailerTask.class.getSimpleName();
+            private String[] getMovieDetailFromJSON(String detailjson)
+                    throws JSONException {
 
-        private String[] getMovieDetailFromJSON(String detailjson)
-                throws JSONException {
+                JSONObject moviejson = new JSONObject(detailjson);
+                JSONObject trailers = moviejson.getJSONObject("trailers");
+                JSONArray youtube = trailers.getJSONArray("youtube");
 
-            JSONObject moviejson = new JSONObject(detailjson);
-            JSONObject trailers = moviejson.getJSONObject("trailers");
-            JSONArray youtube = trailers.getJSONArray("youtube");
+                resultStr = new String[youtube.length()];
 
-            resultStr = new String[youtube.length()];
+                for(int i=0;i<youtube.length();++i){
+                    JSONObject movie = youtube.getJSONObject(i);
 
-            for(int i=0;i<youtube.length();++i){
-                JSONObject movie = youtube.getJSONObject(i);
+                    String url_id = movie.getString("source");
+                    resultStr[i] = url_id;
+                }
+                for(String s:resultStr){
+                    Log.v(LOG_TAG, "URL:" + s);
+                }
 
-                String url_id = movie.getString("source");
-                resultStr[i] = url_id;
-            }
-            for(String s:resultStr){
-                Log.v(LOG_TAG, "URL:" + s);
+                return resultStr;
             }
 
-            return resultStr;
-        }
-
-        @Override
-        protected String[] doInBackground(String... params){
-            if(params.length == 0){
-                return null;
-            }
-            HttpURLConnection urlconnection = null;
-            BufferedReader reader = null;
-            String detailjson = null;
-
-
-            try{
-                String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
-                Uri.Builder builder = new Uri.Builder();
-                builder.scheme("http")
-                        .authority("api.themoviedb.org")
-                        .appendPath("3")
-                        .appendPath("movie")
-                        .appendPath(params[0])
-                        .appendQueryParameter("api_key", my_api_key)
-                        .appendQueryParameter("append_to_response", "trailers");
-
-                String myurl = builder.build().toString();
-                URL url = new URL(myurl);
-                Log.v(LOG_TAG, "Built url" + myurl);
-
-                urlconnection = (HttpURLConnection) url.openConnection();
-                urlconnection.setRequestMethod("GET");
-                urlconnection.connect();
-
-                InputStream input = urlconnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-
-                if(input == null){
+            @Override
+            protected String[] doInBackground(String... params){
+                if(params.length == 0){
                     return null;
                 }
-                reader = new BufferedReader(new InputStreamReader(input));
-                String line;
+                HttpURLConnection urlconnection = null;
+                BufferedReader reader = null;
+                String detailjson = null;
 
-                while((line = reader.readLine())!=null){
-                    buffer.append(line+"\n");
-                }
 
-                if(buffer.length() == 0){
+                try{
+                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+                    Uri.Builder builder = new Uri.Builder();
+                    builder.scheme("http")
+                            .authority("api.themoviedb.org")
+                            .appendPath("3")
+                            .appendPath("movie")
+                            .appendPath(params[0])
+                            .appendQueryParameter("api_key", my_api_key)
+                            .appendQueryParameter("append_to_response", "trailers");
+
+                    String myurl = builder.build().toString();
+                    URL url = new URL(myurl);
+                    Log.v(LOG_TAG, "Built url" + myurl);
+
+                    urlconnection = (HttpURLConnection) url.openConnection();
+                    urlconnection.setRequestMethod("GET");
+                    urlconnection.connect();
+
+                    InputStream input = urlconnection.getInputStream();
+                    StringBuffer buffer = new StringBuffer();
+
+                    if(input == null){
+                        return null;
+                    }
+                    reader = new BufferedReader(new InputStreamReader(input));
+                    String line;
+
+                    while((line = reader.readLine())!=null){
+                        buffer.append(line+"\n");
+                    }
+
+                    if(buffer.length() == 0){
+                        return null;
+                    }
+                    detailjson = buffer.toString();
+
+                    Log.v(LOG_TAG, "Movies JSON String" + detailjson);
+                }catch (IOException e){
+                    Log.e(LOG_TAG,"Error" , e);
                     return null;
-                }
-                detailjson = buffer.toString();
-
-                Log.v(LOG_TAG, "Movies JSON String" + detailjson);
-            }catch (IOException e){
-                Log.e(LOG_TAG,"Error" , e);
-                return null;
-            }finally {
-                if(urlconnection!=null){
-                    urlconnection.disconnect();
-                }
-                if(reader!=null){
-                    try{
-                        reader.close();
-                    }catch(final IOException e){
-                        Log.e(LOG_TAG,"Error closing stream", e);
+                }finally {
+                    if(urlconnection!=null){
+                        urlconnection.disconnect();
+                    }
+                    if(reader!=null){
+                        try{
+                            reader.close();
+                        }catch(final IOException e){
+                            Log.e(LOG_TAG,"Error closing stream", e);
+                        }
                     }
                 }
+                try{
+                    return getMovieDetailFromJSON(detailjson);
+                }catch(JSONException e){
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                    e.printStackTrace();
+                }
+                return null;
             }
-            try{
-                return getMovieDetailFromJSON(detailjson);
-            }catch(JSONException e){
-                Log.e(LOG_TAG, e.getMessage(), e);
-                e.printStackTrace();
-            }
-            return null;
-        }
 
-        @Override
-        public void onPostExecute(String[] result){
-                ImageView imageView = (ImageView) findViewById(R.id.trailer1);
+            @Override
+            public void onPostExecute(String[] result){
+                ImageView imageView = (ImageView) getView().findViewById(R.id.trailer1);
                 if(result.length!=0){
-                    Picasso.with(getBaseContext()).load("http://img.youtube.com/vi/" + result[0] + "/hqdefault.jpg").into(imageView);
+                    Picasso.with(getContext()).load("http://img.youtube.com/vi/" + result[0] + "/hqdefault.jpg").into(imageView);
                 }
                 else{
                     //https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg
-                    Picasso.with(getBaseContext()).load(R.drawable.hqdefault).into(imageView);
+                    Picasso.with(getContext()).load(R.drawable.hqdefault).into(imageView);
                 }
 
 //                urls = new ArrayList<String>(result.length);
@@ -415,110 +411,110 @@ public class DetailActivity extends AppCompatActivity {
 //                ImageAdapter imageAdapter = new ImageAdapter(getBaseContext(),urls);
 //                gridview1.setAdapter(imageAdapter);
 
-        }
-    }
-
-    public class FetchReviewDetail extends AsyncTask<String, Void, String[]>{
-        private final String LOG_TAG = FetchReviewDetail.class.getSimpleName();
-
-        private String[] getMovieDetailFromJSON(String detailjson)
-                throws JSONException {
-
-            JSONObject moviejson = new JSONObject(detailjson);
-            JSONObject reviews = moviejson.getJSONObject("reviews");
-            JSONArray people = reviews.getJSONArray("results");
-
-            resultStr1 = new String[people.length()];
-
-            for(int i=0;i<people.length();++i){
-                JSONObject movie = people.getJSONObject(i);
-
-                String content = movie.getString("content");
-
-                content = content.replaceAll("(\\r|\\n)", "");
-                resultStr1[i] = content;
             }
-            for(String s:resultStr1){
-                Log.v(LOG_TAG, "content:" + s);
-            }
-
-            return resultStr1;
         }
 
-        @Override
-        protected String[] doInBackground(String... params){
-            if(params.length == 0){
-                return null;
+        public class FetchReviewDetail extends AsyncTask<String, Void, String[]>{
+            private final String LOG_TAG = FetchReviewDetail.class.getSimpleName();
+
+            private String[] getMovieDetailFromJSON(String detailjson)
+                    throws JSONException {
+
+                JSONObject moviejson = new JSONObject(detailjson);
+                JSONObject reviews = moviejson.getJSONObject("reviews");
+                JSONArray people = reviews.getJSONArray("results");
+
+                resultStr1 = new String[people.length()];
+
+                for(int i=0;i<people.length();++i){
+                    JSONObject movie = people.getJSONObject(i);
+
+                    String content = movie.getString("content");
+
+                    content = content.replaceAll("(\\r|\\n)", "");
+                    resultStr1[i] = content;
+                }
+                for(String s:resultStr1){
+                    Log.v(LOG_TAG, "content:" + s);
+                }
+
+                return resultStr1;
             }
-            HttpURLConnection urlconnection = null;
-            BufferedReader reader = null;
-            String detailjson = null;
 
-            try{
-                String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
-                Uri.Builder builder = new Uri.Builder();
-                builder.scheme("http")
-                        .authority("api.themoviedb.org")
-                        .appendPath("3")
-                        .appendPath("movie")
-                        .appendPath(params[0])
-                        .appendQueryParameter("api_key", my_api_key)
-                        .appendQueryParameter("append_to_response", "reviews");
-
-                String myurl = builder.build().toString();
-                URL url = new URL(myurl);
-                Log.v(LOG_TAG, "Built url" + myurl);
-
-                urlconnection = (HttpURLConnection) url.openConnection();
-                urlconnection.setRequestMethod("GET");
-                urlconnection.connect();
-
-                InputStream input = urlconnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-
-                if(input == null){
+            @Override
+            protected String[] doInBackground(String... params){
+                if(params.length == 0){
                     return null;
                 }
-                reader = new BufferedReader(new InputStreamReader(input));
-                String line;
+                HttpURLConnection urlconnection = null;
+                BufferedReader reader = null;
+                String detailjson = null;
 
-                while((line = reader.readLine())!=null){
-                    buffer.append(line+"\n");
-                }
+                try{
+                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+                    Uri.Builder builder = new Uri.Builder();
+                    builder.scheme("http")
+                            .authority("api.themoviedb.org")
+                            .appendPath("3")
+                            .appendPath("movie")
+                            .appendPath(params[0])
+                            .appendQueryParameter("api_key", my_api_key)
+                            .appendQueryParameter("append_to_response", "reviews");
 
-                if(buffer.length() == 0){
+                    String myurl = builder.build().toString();
+                    URL url = new URL(myurl);
+                    Log.v(LOG_TAG, "Built url" + myurl);
+
+                    urlconnection = (HttpURLConnection) url.openConnection();
+                    urlconnection.setRequestMethod("GET");
+                    urlconnection.connect();
+
+                    InputStream input = urlconnection.getInputStream();
+                    StringBuffer buffer = new StringBuffer();
+
+                    if(input == null){
+                        return null;
+                    }
+                    reader = new BufferedReader(new InputStreamReader(input));
+                    String line;
+
+                    while((line = reader.readLine())!=null){
+                        buffer.append(line+"\n");
+                    }
+
+                    if(buffer.length() == 0){
+                        return null;
+                    }
+                    detailjson = buffer.toString();
+
+                    Log.v(LOG_TAG, "Movies JSON String" + detailjson);
+                }catch (IOException e){
+                    Log.e(LOG_TAG,"Error" , e);
                     return null;
-                }
-                detailjson = buffer.toString();
-
-                Log.v(LOG_TAG, "Movies JSON String" + detailjson);
-            }catch (IOException e){
-                Log.e(LOG_TAG,"Error" , e);
-                return null;
-            }finally {
-                if(urlconnection!=null){
-                    urlconnection.disconnect();
-                }
-                if(reader!=null){
-                    try{
-                        reader.close();
-                    }catch(final IOException e){
-                        Log.e(LOG_TAG,"Error closing stream", e);
+                }finally {
+                    if(urlconnection!=null){
+                        urlconnection.disconnect();
+                    }
+                    if(reader!=null){
+                        try{
+                            reader.close();
+                        }catch(final IOException e){
+                            Log.e(LOG_TAG,"Error closing stream", e);
+                        }
                     }
                 }
+                try{
+                    return getMovieDetailFromJSON(detailjson);
+                }catch(JSONException e){
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                    e.printStackTrace();
+                }
+                return null;
             }
-            try{
-                return getMovieDetailFromJSON(detailjson);
-            }catch(JSONException e){
-                Log.e(LOG_TAG, e.getMessage(), e);
-                e.printStackTrace();
-            }
-            return null;
-        }
 
-        @Override
-        public void onPostExecute(String[] result){
-                TextView textView = (TextView) findViewById(R.id.review1);
+            @Override
+            public void onPostExecute(String[] result){
+                TextView textView = (TextView) getView().findViewById(R.id.review1);
                 if(result.length!=0) {
                     textView.setText(result[0]);
                 }
@@ -530,8 +526,136 @@ public class DetailActivity extends AppCompatActivity {
 //                listview = (ListView) findViewById(R.id.listview1);
 //                listview.setAdapter(adapter);
 
+            }
         }
     }
+
+    
+    @Override
+    public void onStart(){
+        super.onStart();
+    }
+
+//    public class FetchTrailerTask extends AsyncTask<String, Void, String[]>{
+//        private final String LOG_TAG = FetchTrailerTask.class.getSimpleName();
+//
+//        private String[] getMovieDetailFromJSON(String detailjson)
+//                throws JSONException {
+//
+//            JSONObject moviejson = new JSONObject(detailjson);
+//            JSONObject trailers = moviejson.getJSONObject("trailers");
+//            JSONArray youtube = trailers.getJSONArray("youtube");
+//
+//            resultStr = new String[youtube.length()];
+//
+//            for(int i=0;i<youtube.length();++i){
+//                JSONObject movie = youtube.getJSONObject(i);
+//
+//                String url_id = movie.getString("source");
+//                resultStr[i] = url_id;
+//            }
+//            for(String s:resultStr){
+//                Log.v(LOG_TAG, "URL:" + s);
+//            }
+//
+//            return resultStr;
+//        }
+//
+//        @Override
+//        protected String[] doInBackground(String... params){
+//            if(params.length == 0){
+//                return null;
+//            }
+//            HttpURLConnection urlconnection = null;
+//            BufferedReader reader = null;
+//            String detailjson = null;
+//
+//
+//            try{
+//                String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+//                Uri.Builder builder = new Uri.Builder();
+//                builder.scheme("http")
+//                        .authority("api.themoviedb.org")
+//                        .appendPath("3")
+//                        .appendPath("movie")
+//                        .appendPath(params[0])
+//                        .appendQueryParameter("api_key", my_api_key)
+//                        .appendQueryParameter("append_to_response", "trailers");
+//
+//                String myurl = builder.build().toString();
+//                URL url = new URL(myurl);
+//                Log.v(LOG_TAG, "Built url" + myurl);
+//
+//                urlconnection = (HttpURLConnection) url.openConnection();
+//                urlconnection.setRequestMethod("GET");
+//                urlconnection.connect();
+//
+//                InputStream input = urlconnection.getInputStream();
+//                StringBuffer buffer = new StringBuffer();
+//
+//                if(input == null){
+//                    return null;
+//                }
+//                reader = new BufferedReader(new InputStreamReader(input));
+//                String line;
+//
+//                while((line = reader.readLine())!=null){
+//                    buffer.append(line+"\n");
+//                }
+//
+//                if(buffer.length() == 0){
+//                    return null;
+//                }
+//                detailjson = buffer.toString();
+//
+//                Log.v(LOG_TAG, "Movies JSON String" + detailjson);
+//            }catch (IOException e){
+//                Log.e(LOG_TAG,"Error" , e);
+//                return null;
+//            }finally {
+//                if(urlconnection!=null){
+//                    urlconnection.disconnect();
+//                }
+//                if(reader!=null){
+//                    try{
+//                        reader.close();
+//                    }catch(final IOException e){
+//                        Log.e(LOG_TAG,"Error closing stream", e);
+//                    }
+//                }
+//            }
+//            try{
+//                return getMovieDetailFromJSON(detailjson);
+//            }catch(JSONException e){
+//                Log.e(LOG_TAG, e.getMessage(), e);
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        public void onPostExecute(String[] result){
+//                ImageView imageView = (ImageView) findViewById(R.id.trailer1);
+//                if(result.length!=0){
+//                    Picasso.with(getBaseContext()).load("http://img.youtube.com/vi/" + result[0] + "/hqdefault.jpg").into(imageView);
+//                }
+//                else{
+//                    //https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg
+//                    Picasso.with(getBaseContext()).load(R.drawable.hqdefault).into(imageView);
+//                }
+//
+////                urls = new ArrayList<String>(result.length);
+////                for(int i=0;i<result.length;++i){
+////                    urls.add("http://img.youtube.com/vi/" + result[i] + "/1.jpg");
+////                }
+////                gridview1 = (GridView) findViewById(R.id.gridview1);
+////                ImageAdapter imageAdapter = new ImageAdapter(getBaseContext(),urls);
+////                gridview1.setAdapter(imageAdapter);
+//
+//        }
+//    }
+
+
 
 //    public class ImageAdapter extends BaseAdapter
 //    {
