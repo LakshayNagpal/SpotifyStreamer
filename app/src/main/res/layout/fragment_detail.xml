@@ -115,26 +115,51 @@
         android:textColor="#000000"
         android:textAllCaps="true"
         android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/trailer1"
-        android:onClick="open_trailer"
+        android:layout_weight="1"
+        android:onClick="open_trailer1"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailer2"
+            android:layout_weight="1"
+            android:onClick="open_trailer2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailer3"
+            android:layout_weight="1"
+            android:onClick="open_trailer3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+        </LinearLayout>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/trailer_full_list"-->
+        <!--android:text="ALL Trailers Here"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:onClick="trailers_all"-->
+        <!--android:background="#000000"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="10dp"/>-->
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/trailer_full_list"
-        android:text="ALL Trailers Here"
-        android:layout_gravity="center_horizontal"
-        android:onClick="trailers_all"
-        android:background="#000000"
-        android:textColor="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
-
+        android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,19 +176,35 @@
         android:id="@+id/review1"
         android:text="No Reviews Found"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/review_full_list"
-        android:text="ALL Reviews Here"
-        android:layout_gravity="center_horizontal"
-        android:onClick="reviews_all"
-        android:background="#000000"
-        android:textColor="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="15dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/review2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/review3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"/>
+        </LinearLayout>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/review_full_list"-->
+        <!--android:text="ALL Reviews Here"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:onClick="reviews_all"-->
+        <!--android:background="#000000"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:layout_marginBottom="15dp"/>-->
 
     </LinearLayout>
 </ScrollView>

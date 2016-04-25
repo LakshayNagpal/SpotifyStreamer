@@ -88,6 +88,7 @@ public class DetailActivity extends AppCompatActivity {
     ArrayList<String> urls;
     static boolean isfavorite = false;
     private static long movieId;
+    static View rootview;
 
     public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -140,7 +141,7 @@ public class DetailActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             Intent intent = getActivity().getIntent();
-            View rootview =  inflater.inflate(R.layout.fragment_detail, container, false);
+            rootview =  inflater.inflate(R.layout.fragment_detail, container, false);
 
             if(intent!=null){
 //                String overview = intent.getStringExtra("overview");
@@ -394,14 +395,51 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onPostExecute(String[] result){
-                ImageView imageView = (ImageView) getView().findViewById(R.id.trailer1);
-                if(result.length!=0){
-                    Picasso.with(getContext()).load("http://img.youtube.com/vi/" + result[0] + "/hqdefault.jpg").into(imageView);
+                if(result!=null) {
+
+                    ImageView imageView1 = (ImageView) rootview.findViewById(R.id.trailer1);
+                    ImageView imageView2 = (ImageView) rootview.findViewById(R.id.trailer2);
+                    ImageView imageView3 = (ImageView) rootview.findViewById(R.id.trailer3);
+                    if (result.length != 0 && result.length > 0 && result[0] != null) {
+                        Picasso.with(getContext()).load("http://img.youtube.com/vi/" + result[0] + "/1.jpg").into(imageView1);
+                    }
+                    if (result.length != 0 && result.length > 1 && result[1] != null) {
+                        Picasso.with(getContext()).load("http://img.youtube.com/vi/" + result[1] + "/1.jpg").into(imageView2);
+                    }
+                    if (result.length != 0 && result.length > 2 && result[2] != null) {
+                        Picasso.with(getContext()).load("http://img.youtube.com/vi/" + result[2] + "/1.jpg").into(imageView3);
+                    }
+                    imageView1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(resultStr.length != 0 && resultStr.length > 0 && resultStr[0] != null){
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[0])));
+                            }
+                        }
+                    });
+
+                    imageView2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(resultStr.length != 0 && resultStr.length > 1 && resultStr[1] != null){
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[1])));
+                            }
+                        }
+                    });
+
+                    imageView3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(resultStr.length != 0 && resultStr.length > 2 && resultStr[2] != null){
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[2])));
+                            }
+                        }
+                    });
                 }
-                else{
-                    //https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg
-                    Picasso.with(getContext()).load(R.drawable.hqdefault).into(imageView);
-                }
+//                else{
+//                    //https://i.ytimg.com/vi/DH3ItsuvtQg/hqdefault.jpg
+//                    Picasso.with(getContext()).load(R.drawable.hqdefault).into(imageView);
+//                }
 
 //                urls = new ArrayList<String>(result.length);
 //                for(int i=0;i<result.length;++i){
@@ -514,13 +552,21 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onPostExecute(String[] result){
-                TextView textView = (TextView) getView().findViewById(R.id.review1);
-                if(result.length!=0) {
-                    textView.setText(result[0]);
+                TextView textView1 = (TextView) rootview.findViewById(R.id.review1);
+                TextView textView2 = (TextView) rootview.findViewById(R.id.review2);
+                TextView textView3 = (TextView) rootview.findViewById(R.id.review3);
+                if(result.length!=0 && result.length>0 && result[0]!=null) {
+                    textView1.setText(result[0]);
                 }
-                else{
-                    textView.setText("No Reviews Found");
+                if(result.length!=0 && result.length>1 && result[1]!=null) {
+                    textView2.setText(result[1]);
                 }
+                if(result.length!=0 && result.length>2 && result[2]!=null) {
+                    textView3.setText(result[2]);
+                }
+//                else{
+//                    textView1.setText("No Reviews Found");
+//                }
 //                adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.listview_textview, R.id.listview_textview, result);
 //
 //                listview = (ListView) findViewById(R.id.listview1);
@@ -528,9 +574,28 @@ public class DetailActivity extends AppCompatActivity {
 
             }
         }
+
+//        public void open_trailer1(View view){
+//            if(resultStr.length!=0) {
+//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[0])));
+//            }
+//        }
+//
+//        public void open_trailer2(View view){
+//            if(resultStr.length!=0 && resultStr[1]!=null) {
+//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[1])));
+//            }
+//        }
+//
+//        public void open_trailer3(View view){
+//            if(resultStr.length!=0 && resultStr[2]!=null) {
+//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[2])));
+//            }
+//        }
+
     }
 
-    
+
     @Override
     public void onStart(){
         super.onStart();
@@ -699,33 +764,35 @@ public class DetailActivity extends AppCompatActivity {
 //        }
 //    }
 
-    public void open_trailer(View view){
-        if(resultStr.length!=0) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + resultStr[0])));
-        }
-    }
 
-    public void trailers_all(View view){
-        if(resultStr.length!=0){
 
-            Intent intent = new Intent(getBaseContext(),all_trailers.class);
-            intent.putExtra("trailers", resultStr);
-            startActivity(intent);
-        }
-        else{
-            Toast.makeText(getBaseContext(), "Sorry, No Trailers Found!", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    public void trailers_all(View view){
+////        TextView t = (TextView) findViewById(R.id.detail_text2);
+////        if(t.getText().toString().equals("No Movie Selected")){
+////            Toast.makeText(getBaseContext(), "Sorry, No Movie Found!", Toast.LENGTH_SHORT).show();
+////            return;
+////        }
+//        if(resultStr.length!=0){
+//
+//            Intent intent = new Intent(getBaseContext(),all_trailers.class);
+//            intent.putExtra("trailers", resultStr);
+//            startActivity(intent);
+//        }
+//        else{
+//            Toast.makeText(getBaseContext(), "Sorry, No Trailers Found!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-    public void reviews_all(View view){
-        if(resultStr1.length!=0){
+//    public void reviews_all(View view){
+//        if(resultStr1.length!=0){
+//
+//            Intent intent = new Intent(getBaseContext(), all_reviews.class);
+//            intent.putExtra("reviews",resultStr1);
+//            startActivity(intent);
+//        }
+//        else{
+//            Toast.makeText(getBaseContext(), "Sorry, No Reviews Found!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-            Intent intent = new Intent(getBaseContext(), all_reviews.class);
-            intent.putExtra("reviews",resultStr1);
-            startActivity(intent);
-        }
-        else{
-            Toast.makeText(getBaseContext(), "Sorry, No Reviews Found!", Toast.LENGTH_SHORT).show();
-        }
-    }
 }
