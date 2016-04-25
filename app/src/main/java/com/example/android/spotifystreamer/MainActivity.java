@@ -9,7 +9,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback {
 
-
+    private boolean mTwoPane;
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 //            }
 //        });
 
+        if(findViewById(R.id.fragment_detail)!=null){
+            mTwoPane = true;
+            if(savedInstanceState == null){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_detail, new DetailActivity.DetailFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        }else{
+            mTwoPane = false;
+        }
 
     }
 
@@ -56,8 +67,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     @Override
     public void onItemSelected(long movieId) {
-        Intent intent = new Intent(this, DetailActivity.class)
-                .putExtra(Intent.EXTRA_TEXT, movieId);
-        startActivity(intent);
+
+        if(mTwoPane){
+            Bundle args = new Bundle();
+            args.putLong(Intent.EXTRA_TEXT, movieId);
+
+            DetailActivity.DetailFragment fragment = new DetailActivity.DetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_detail, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        }
+        else {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .putExtra(Intent.EXTRA_TEXT, movieId);
+            startActivity(intent);
+        }
     }
 }

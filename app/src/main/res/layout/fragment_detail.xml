@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-<LinearLayout
 
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.spotifystreamer.DetailActivityFragment"
@@ -161,5 +161,5 @@
         android:paddingRight="10dp"
         android:layout_marginBottom="15dp"/>
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

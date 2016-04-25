@@ -49,6 +49,12 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_detail, new DetailFragment())
+                    .commit();
+        }
     }
 
     @Override
@@ -154,7 +160,10 @@ public class DetailActivity extends AppCompatActivity {
                 Log.v(LOG_TAG, "Movie iD" + movieId);
                 //url = intent.getStringExtra("url");
             }
-
+            Bundle arguments = getArguments();
+            if(arguments!=null){
+                movieId = arguments.getLong(Intent.EXTRA_TEXT);
+            }
 //            String final_url = "http://image.tmdb.org/t/p/w185/" + url;
 //            ImageView i = (ImageView) rootview.findViewById(R.id.image_view1);
 //            Picasso.with(getActivity()).load(final_url).into(i);
