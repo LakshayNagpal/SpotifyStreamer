@@ -248,6 +248,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         movieadapter.swapCursor(null);
     }
 
+    @Override
+    public void onResume(){
+        Log.v(LOG_TAG, "Resume function in Main Activity called");
+        getLoaderManager().restartLoader(MOVIE_LOADER,null,this);
+        super.onResume();
+    }
+
     public interface Callback {
         /**
          * DetailFragmentCallback for when an item has been selected.
