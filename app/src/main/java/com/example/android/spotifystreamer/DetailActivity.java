@@ -218,7 +218,7 @@ public class DetailActivity extends AppCompatActivity {
 
             switch(loader.getId()){
                 case MOVIE_DETAIL_LOADER:{
-
+                    ((Button) getView().findViewById(R.id.fav_button)).setVisibility(View.VISIBLE);
                     ((TextView) getView().findViewById(R.id.detail_text)).setText(data.getString(COL_MOVIE_OVERVIEW));
                     ((TextView) getView().findViewById(R.id.detail_text1)).setText(data.getString(COL_RELEASE_DATE));
                     ((TextView) getView().findViewById(R.id.detail_text2)).setText(data.getString(COL_TITLE));
@@ -274,6 +274,7 @@ public class DetailActivity extends AppCompatActivity {
                     break;
                 }
                 case FAVORITE_LOADER:{
+                    ((Button) getView().findViewById(R.id.fav_button)).setVisibility(View.VISIBLE);
                     ((TextView) getView().findViewById(R.id.detail_text)).setText(data.getString(COL_MOVIE_OVERVIEW));
                     ((TextView) getView().findViewById(R.id.detail_text1)).setText(data.getString(COL_RELEASE_DATE));
                     ((TextView) getView().findViewById(R.id.detail_text2)).setText(data.getString(COL_TITLE));
