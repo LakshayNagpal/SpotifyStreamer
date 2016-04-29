@@ -116,12 +116,15 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
             urlconnection.setRequestMethod("GET");
             urlconnection.connect();
 
+
             InputStream input = urlconnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
 
             if(input == null){
+               // Toast.makeText(context, "Please check your Internet Connectivity", Toast.LENGTH_SHORT).show();
                 return null;
             }
+           // Toast.makeText(context, "Loading... Please Wait", Toast.LENGTH_SHORT).show();
             reader = new BufferedReader(new InputStreamReader(input));
             String line;
 

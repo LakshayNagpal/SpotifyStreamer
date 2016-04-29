@@ -42,7 +42,7 @@ import java.util.Vector;
 
 public class DetailActivity extends AppCompatActivity {
 
-
+    public final String LOG_TAG = DetailActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -593,11 +593,30 @@ public class DetailActivity extends AppCompatActivity {
 //            }
 //        }
 
+        @Override
+        public void onResume(){
+            Log.v(LOG_TAG, "on resume in detail fragment called");
+            ((TextView) getView().findViewById(R.id.detail_text2)).setText("No Movie Selected");
+            ((ImageView) getView().findViewById(R.id.image_view1)).setImageResource(0);
+            ((TextView) getView().findViewById(R.id.detail_text1)).setText("No Movie Selected");
+            ((TextView) getView().findViewById(R.id.detail_text3)).setText("0.0");
+            ((Button) getView().findViewById(R.id.fav_button)).setVisibility(View.INVISIBLE);
+            ((TextView) getView().findViewById(R.id.detail_text2)).setText("No Movie Selected");
+            ((TextView) getView().findViewById(R.id.detail_text)).setText("");
+            ((ImageView) getView().findViewById(R.id.trailer1)).setImageResource(0);
+            ((ImageView) getView().findViewById(R.id.trailer2)).setImageResource(0);
+            ((ImageView) getView().findViewById(R.id.trailer3)).setImageResource(0);
+            ((TextView) getView().findViewById(R.id.review1)).setText("");
+            ((TextView) getView().findViewById(R.id.review2)).setText("");
+            ((TextView) getView().findViewById(R.id.review3)).setText("");
+            super.onResume();
+        }
     }
 
 
     @Override
     public void onStart(){
+        Log.v(LOG_TAG, "on start of Detail Activity called");
         super.onStart();
     }
 

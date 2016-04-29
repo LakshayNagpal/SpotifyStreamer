@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.android.spotifystreamer.data.MovieContract;
 
@@ -160,6 +161,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 Log.v(LOG_TAG, "Popular settings called");
                 FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
                 moviesTask.execute("popular");
+
                 Cursor popcursor = getContext().getContentResolver().query(
                         MovieContract.MovieEntry.CONTENT_URI,
                         null,
@@ -199,6 +201,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onStart(){
         super.onStart();
+        Log.v(LOG_TAG, "on start of Main Activity called");
+        Toast.makeText(getActivity(), "Loading... Please Wait", Toast.LENGTH_SHORT).show();
         updateweather();
     }
 
@@ -251,7 +255,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onResume(){
         Log.v(LOG_TAG, "Resume function in Main Activity called");
-        getLoaderManager().restartLoader(MOVIE_LOADER,null,this);
+        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
         super.onResume();
     }
 
