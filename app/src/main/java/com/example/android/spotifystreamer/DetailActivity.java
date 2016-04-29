@@ -2,10 +2,12 @@ package com.example.android.spotifystreamer;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -50,6 +52,8 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_detail, new DetailFragment())
@@ -89,6 +93,7 @@ public class DetailActivity extends AppCompatActivity {
     static boolean isfavorite = false;
     private static long movieId;
     static View rootview;
+    private static String mMovie;
 
     public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -142,6 +147,8 @@ public class DetailActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             Intent intent = getActivity().getIntent();
             rootview =  inflater.inflate(R.layout.fragment_detail, container, false);
+            SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            mMovie = shared.getString(getString(R.string.movies_key), "popular");
 
             if(intent!=null){
 //                String overview = intent.getStringExtra("overview");
@@ -218,7 +225,6 @@ public class DetailActivity extends AppCompatActivity {
 
             switch(loader.getId()){
                 case MOVIE_DETAIL_LOADER:{
-                    ((Button) getView().findViewById(R.id.fav_button)).setVisibility(View.VISIBLE);
                     ((TextView) getView().findViewById(R.id.detail_text)).setText(data.getString(COL_MOVIE_OVERVIEW));
                     ((TextView) getView().findViewById(R.id.detail_text1)).setText(data.getString(COL_RELEASE_DATE));
                     ((TextView) getView().findViewById(R.id.detail_text2)).setText(data.getString(COL_TITLE));
@@ -274,7 +280,6 @@ public class DetailActivity extends AppCompatActivity {
                     break;
                 }
                 case FAVORITE_LOADER:{
-                    ((Button) getView().findViewById(R.id.fav_button)).setVisibility(View.VISIBLE);
                     ((TextView) getView().findViewById(R.id.detail_text)).setText(data.getString(COL_MOVIE_OVERVIEW));
                     ((TextView) getView().findViewById(R.id.detail_text1)).setText(data.getString(COL_RELEASE_DATE));
                     ((TextView) getView().findViewById(R.id.detail_text2)).setText(data.getString(COL_TITLE));
@@ -597,21 +602,20 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onResume(){
             Log.v(LOG_TAG, "on resume in detail fragment called");
-            ((TextView) getView().findViewById(R.id.detail_text2)).setText("No Movie Selected");
-            ((ImageView) getView().findViewById(R.id.image_view1)).setImageResource(0);
-            ((TextView) getView().findViewById(R.id.detail_text1)).setText("No Movie Selected");
-            ((TextView) getView().findViewById(R.id.detail_text3)).setText("0.0");
-            ((Button) getView().findViewById(R.id.fav_button)).setVisibility(View.INVISIBLE);
-            ((TextView) getView().findViewById(R.id.detail_text2)).setText("No Movie Selected");
-            ((TextView) getView().findViewById(R.id.detail_text)).setText("");
-            ((ImageView) getView().findViewById(R.id.trailer1)).setImageResource(0);
-            ((ImageView) getView().findViewById(R.id.trailer2)).setImageResource(0);
-            ((ImageView) getView().findViewById(R.id.trailer3)).setImageResource(0);
-            ((TextView) getView().findViewById(R.id.review1)).setText("");
-            ((TextView) getView().findViewById(R.id.review2)).setText("");
-            ((TextView) getView().findViewById(R.id.review3)).setText("");
             super.onResume();
+
+            String lMovie;
+            SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            lMovie = shared.getString(getString(R.string.movies_key), "popular");
+
+            if(lMovie!=null && !lMovie.equals(mMovie)){
+//                getLoaderManager().restartLoader(MOVIE_DETAIL_LOADER,null,this);
+//                getLoaderManager().restartLoader(FAVORITE_LOADER,null,this);
+                  rootview.setVisibility(View.INVISIBLE);
+                mMovie = lMovie;
+            }
         }
+
     }
 
 

@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback {
 
-    private boolean mTwoPane;
+    public boolean mTwoPane;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     @Override
