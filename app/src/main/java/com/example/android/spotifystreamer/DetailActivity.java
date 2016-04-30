@@ -16,8 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -61,28 +59,28 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.detail, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.detail, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            startActivity(new Intent(this, SettingsActivity.class));
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public static String movie_id;
     public static String[] resultStr;
@@ -338,7 +336,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
                 try{
-                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+                    String my_api_key = "abc";
                     Uri.Builder builder = new Uri.Builder();
                     builder.scheme("http")
                             .authority("api.themoviedb.org")
@@ -401,11 +399,14 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onPostExecute(String[] result){
-                if(result!=null) {
 
-                    ImageView imageView1 = (ImageView) rootview.findViewById(R.id.trailer1);
-                    ImageView imageView2 = (ImageView) rootview.findViewById(R.id.trailer2);
-                    ImageView imageView3 = (ImageView) rootview.findViewById(R.id.trailer3);
+                ImageView imageView1 = (ImageView) rootview.findViewById(R.id.trailer1);
+                ImageView imageView2 = (ImageView) rootview.findViewById(R.id.trailer2);
+                ImageView imageView3 = (ImageView) rootview.findViewById(R.id.trailer3);
+                imageView1.setImageResource(0);
+                imageView2.setImageResource(0);
+                imageView3.setImageResource(0);
+                if(result!=null) {
                     if (result.length != 0 && result.length > 0 && result[0] != null) {
                         Picasso.with(getContext()).load("http://img.youtube.com/vi/" + result[0] + "/1.jpg").into(imageView1);
                     }
@@ -495,7 +496,7 @@ public class DetailActivity extends AppCompatActivity {
                 String detailjson = null;
 
                 try{
-                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+                    String my_api_key = "abc";
                     Uri.Builder builder = new Uri.Builder();
                     builder.scheme("http")
                             .authority("api.themoviedb.org")
@@ -561,6 +562,9 @@ public class DetailActivity extends AppCompatActivity {
                 TextView textView1 = (TextView) rootview.findViewById(R.id.review1);
                 TextView textView2 = (TextView) rootview.findViewById(R.id.review2);
                 TextView textView3 = (TextView) rootview.findViewById(R.id.review3);
+                textView1.setText("");
+                textView1.setText("");
+                textView1.setText("");
                 if(result.length!=0 && result.length>0 && result[0]!=null) {
                     textView1.setText(result[0]);
                 }
