@@ -336,7 +336,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
                 try{
-                    String my_api_key = "abc";
+                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
                     Uri.Builder builder = new Uri.Builder();
                     builder.scheme("http")
                             .authority("api.themoviedb.org")
@@ -496,7 +496,7 @@ public class DetailActivity extends AppCompatActivity {
                 String detailjson = null;
 
                 try{
-                    String my_api_key = "abc";
+                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
                     Uri.Builder builder = new Uri.Builder();
                     builder.scheme("http")
                             .authority("api.themoviedb.org")
@@ -565,14 +565,16 @@ public class DetailActivity extends AppCompatActivity {
                 textView1.setText("");
                 textView1.setText("");
                 textView1.setText("");
-                if(result.length!=0 && result.length>0 && result[0]!=null) {
-                    textView1.setText(result[0]);
-                }
-                if(result.length!=0 && result.length>1 && result[1]!=null) {
-                    textView2.setText(result[1]);
-                }
-                if(result.length!=0 && result.length>2 && result[2]!=null) {
-                    textView3.setText(result[2]);
+                if(result!=null) {
+                    if (result.length != 0 && result.length > 0 && result[0] != null) {
+                        textView1.setText(result[0]);
+                    }
+                    if (result.length != 0 && result.length > 1 && result[1] != null) {
+                        textView2.setText(result[1]);
+                    }
+                    if (result.length != 0 && result.length > 2 && result[2] != null) {
+                        textView3.setText(result[2]);
+                    }
                 }
 //                else{
 //                    textView1.setText("No Reviews Found");
