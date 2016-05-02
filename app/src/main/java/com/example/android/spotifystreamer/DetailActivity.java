@@ -336,7 +336,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
                 try{
-                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+                    String my_api_key = "abc";
                     Uri.Builder builder = new Uri.Builder();
                     builder.scheme("http")
                             .authority("api.themoviedb.org")
@@ -496,7 +496,7 @@ public class DetailActivity extends AppCompatActivity {
                 String detailjson = null;
 
                 try{
-                    String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+                    String my_api_key = "abc";
                     Uri.Builder builder = new Uri.Builder();
                     builder.scheme("http")
                             .authority("api.themoviedb.org")

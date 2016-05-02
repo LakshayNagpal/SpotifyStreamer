@@ -96,7 +96,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 
         try{
             //String baseurl = "http://api.themoviedb.org/3/discover/movie?";
-            String my_api_key = "36cc663e1070334ca21c1c6627d76ad7";
+            String my_api_key = "abc";
 
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
